@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitCoach - AI Fitness Coach & Nutrition Tracker</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+</head>
+<body data-theme="dark">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">💪</span>
+                    <span class="logo-text">FitCoach</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard" role="link">
+                    <span class="nav-icon" aria-hidden="true">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="#profile" class="nav-item" data-section="profile" role="link">
+                    <span class="nav-icon" aria-hidden="true">👤</span>
+                    <span class="nav-label">Profile</span>
+                </a>
+                <a href="#workouts" class="nav-item" data-section="workouts" role="link">
+                    <span class="nav-icon" aria-hidden="true">🏋️</span>
+                    <span class="nav-label">Workouts</span>
+                </a>
+                <a href="#nutrition" class="nav-item" data-section="nutrition" role="link">
+                    <span class="nav-icon" aria-hidden="true">🥗</span>
+                    <span class="nav-label">Nutrition</span>
+                </a>
+                <a href="#scanner" class="nav-item" data-section="scanner" role="link">
+                    <span class="nav-icon" aria-hidden="true">📷</span>
+                    <span class="nav-label">Scanner</span>
+                </a>
+                <a href="#progress" class="nav-item" data-section="progress" role="link">
+                    <span class="nav-icon" aria-hidden="true">📈</span>
+                    <span class="nav-label">Progress</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-label">Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                    <span class="hamburger">☰</span>
+                </button>
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="top-bar-actions">
+                    <button class="theme-toggle-mobile" id="themeToggleMobile" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+
+                <!-- DASHBOARD SECTION -->
+                <section class="section active" id="section-dashboard" aria-label="Dashboard">
+                    <!-- Setup Banner -->
+                    <div class="setup-banner" id="setupBanner">
+                        <div class="setup-banner-content">
+                            <h2>Welcome to FitCoach! 👋</h2>
+                            <p>Set up your profile to get personalized calorie targets, macro goals, and workout recommendations.</p>
+                            <a href="#profile" class="btn btn-primary">Set Up Profile</a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" id="qaLogFood" aria-label="Log food">
+                            <span class="qa-icon">🍽️</span>
+                            <span class="qa-label">Log Food</span>
+                        </button>
+                        <button class="quick-action-btn" id="qaStartWorkout" aria-label="Start workout">
+                            <span class="qa-icon">🏋️</span>
+                            <span class="qa-label">Workout</span>
+                        </button>
+                        <button class="quick-action-btn" id="qaAddWater" aria-label="Add water">
+                            <span class="qa-icon">💧</span>
+                            <span class="qa-label">Add Water</span>
+                        </button>
+                        <button class="quick-action-btn" id="qaUpdateWeight" aria-label="Update weight">
+                            <span class="qa-icon">⚖️</span>
+                            <span class="qa-label">Weight</span>
+                        </button>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <!-- Calorie Card -->
+                        <div class="card calorie-card">
+                            <div class="card-header"><h3>Calories</h3></div>
+                            <div class="card-body">
+                                <div class="calorie-ring-container">
+                                    <canvas id="calorieRing" width="160" height="160" aria-label="Calorie progress ring"></canvas>
+                                </div>
+                                <div class="calorie-info">
+                                    <span class="cal-consumed" id="calConsumed">0</span>
+                                    <span class="cal-separator">/</span>
+                                    <span class="cal-target" id="calTarget">2000</span>
+                                    <span class="cal-unit">kcal</span>
+                                </div>
+                                <p class="cal-remaining" id="calRemaining">2000 kcal remaining</p>
+                            </div>
+                        </div>
+
+                        <!-- Macros Card -->
+                        <div class="card macro-card">
+                            <div class="card-header"><h3>Macros</h3></div>
+                            <div class="card-body">
+                                <div class="macro-row">
+                                    <div class="macro-label-row">
+                                        <span class="macro-name">Protein</span>
+                                        <span class="macro-value" id="proteinValue">0 / 150g</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill protein" id="proteinBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                </div>
+                                <div class="macro-row">
+                                    <div class="macro-label-row">
+                                        <span class="macro-name">Carbs</span>
+                                        <span class="macro-value" id="carbsValue">0 / 250g</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill carbs" id="carbsBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                </div>
+                                <div class="macro-row">
+                                    <div class="macro-label-row">
+                                        <span class="macro-name">Fat</span>
+                                        <span class="macro-value" id="fatValue">0 / 65g</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill fat" id="fatBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Burned Card -->
+                        <div class="card">
+                            <div class="card-header"><h3>Burned</h3></div>
+                            <div class="card-body center">
+                                <span class="stat-number" id="caloriesBurned">0</span>
+                                <span class="stat-label">kcal burned today</span>
+                            </div>
+                        </div>
+
+                        <!-- Workout Card -->
+                        <div class="card">
+                            <div class="card-header"><h3>Workout</h3></div>
+                            <div class="card-body center">
+                                <span class="stat-number" id="workoutStatus">—</span>
+                                <span class="stat-label" id="workoutLabel">No workout today</span>
+                            </div>
+                        </div>
+
+                        <!-- Water Card -->
+                        <div class="card water-card">
+                            <div class="card-header"><h3>Hydration</h3></div>
+                            <div class="card-body center">
+                                <div class="water-display">
+                                    <span class="stat-number" id="waterIntake">0</span>
+                                    <span class="stat-unit">/ <span id="waterTarget">8</span> glasses</span>
+                                </div>
+                                <div class="water-drops" id="waterDrops" aria-label="Water intake visualization"></div>
+                                <button class="btn btn-sm btn-accent" id="addWaterBtn">+ Add Glass</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Grid -->
+                    <div class="summary-grid">
+                        <div class="card">
+                            <div class="card-header"><h3>Today's Meals</h3></div>
+                            <div class="card-body">
+                                <div id="mealsSummary" class="summary-list">
+                                    <div class="empty-state">
+                                        <span class="empty-icon">🍽️</span>
+                                        <p>No meals logged today</p>
+                                        <a href="#nutrition" class="btn btn-sm btn-accent">Log a meal</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h3>Today's Workout</h3></div>
+                            <div class="card-body">
+                                <div id="workoutSummary" class="summary-list">
+                                    <div class="empty-state">
+                                        <span class="empty-icon">🏋️</span>
+                                        <p>No workout scheduled</p>
+                                        <a href="#workouts" class="btn btn-sm btn-accent">Plan a workout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Charts -->
+                    <div class="charts-grid">
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Weekly Activity</h3></div>
+                            <div class="card-body">
+                                <canvas id="weeklyActivityChart" aria-label="Weekly activity chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Weekly Nutrition</h3></div>
+                            <div class="card-body">
+                                <canvas id="weeklyNutritionChart" aria-label="Weekly nutrition chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROFILE SECTION -->
+                <section class="section" id="section-profile" aria-label="Profile">
+                    <div class="section-placeholder">
+                        <div class="empty-state">
+                            <span class="empty-icon">👤</span>
+                            <h2>Profile & Goals</h2>
+                            <p>Configure your personal details, fitness goals, and daily targets.</p>
+                            <p class="text-muted">Full profile management coming in Phase 2.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WORKOUTS SECTION -->
+                <section class="section" id="section-workouts" aria-label="Workouts">
+                    <div class="section-placeholder">
+                        <div class="empty-state">
+                            <span class="empty-icon">🏋️</span>
+                            <h2>Workout Coach</h2>
+                            <p>Personalized workout plans tailored to your goals and equipment.</p>
+                            <p class="text-muted">Workout planner coming in Phase 3.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NUTRITION SECTION -->
+                <section class="section" id="section-nutrition" aria-label="Nutrition">
+                    <div class="section-placeholder">
+                        <div class="empty-state">
+                            <span class="empty-icon">🥗</span>
+                            <h2>Nutrition Tracker</h2>
+                            <p>Track your meals, calories, and macros throughout the day.</p>
+                            <p class="text-muted">Nutrition tracking coming in Phase 4.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SCANNER SECTION -->
+                <section class="section" id="section-scanner" aria-label="Barcode Scanner">
+                    <div class="section-placeholder">
+                        <div class="empty-state">
+                            <span class="empty-icon">📷</span>
+                            <h2>Barcode Scanner</h2>
+                            <p>Scan food barcodes to quickly log nutrition information.</p>
+                            <p class="text-muted">Barcode scanning coming in Phase 5.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROGRESS SECTION -->
+                <section class="section" id="section-progress" aria-label="Progress">
+                    <div class="section-placeholder">
+                        <div class="empty-state">
+                            <span class="empty-icon">📈</span>
+                            <h2>Progress Analytics</h2>
+                            <p>Track your fitness journey with charts and insights.</p>
+                            <p class="text-muted">Progress analytics coming in Phase 6.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- Weight Update Modal -->
+    <div class="modal-overlay" id="weightModal" role="dialog" aria-modal="true" aria-labelledby="weightModalTitle">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="weightModalTitle">Update Weight</h3>
+                <button class="modal-close" id="weightModalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="weightInput">Current Weight</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="weightInput" class="form-input" min="20" max="500" step="0.1" placeholder="Enter weight">
+                        <span class="input-unit" id="weightUnit">kg</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="weightModalCancel">Cancel</button>
+                <button class="btn btn-primary" id="weightModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/storage.js"></script>
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/profile.js"></script>
+    <script src="/static/js/workouts.js"></script>
+    <script src="/static/js/nutrition.js"></script>
+    <script src="/static/js/scanner.js"></script>
+    <script src="/static/js/progress.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
