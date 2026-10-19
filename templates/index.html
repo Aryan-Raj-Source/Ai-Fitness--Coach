@@ -453,14 +453,136 @@
                     </div>
                 </section>
 
-                <!-- WORKOUTS SECTION -->
-                <section class="section" id="section-workouts" aria-label="Workouts">
-                    <div class="section-placeholder">
-                        <div class="empty-state">
-                            <span class="empty-icon">🏋️</span>
-                            <h2>Workout Coach</h2>
-                            <p>Personalized workout plans tailored to your goals and equipment.</p>
-                            <p class="text-muted">Workout planner coming in Phase 3.</p>
+                <!-- WORKOUTS SECTION (Phase 3) -->
+                <section class="section" id="section-workouts" aria-label="Workout Coach">
+                    <!-- Routine Hero Banner -->
+                    <div class="routine-banner-hero" id="routineHero">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <h2 style="font-size: 1.35rem; margin: 0;" id="programTitle">Workout Coach & Plan</h2>
+                                <span class="badge badge-success" id="programBadge">Ready</span>
+                            </div>
+                            <p class="text-muted" style="margin: 0; font-size: 0.9rem;" id="programDesc">
+                                Structured, science-backed workout splits tailored to your equipment, frequency, and fitness level.
+                            </p>
+                        </div>
+                        <div class="routine-stats-chips">
+                            <div class="routine-chip">
+                                <span>📅</span> <span>Frequency: <strong id="chipDays">4 Days/wk</strong></span>
+                            </div>
+                            <div class="routine-chip">
+                                <span>🏋️</span> <span>Gear: <strong id="chipGear">Full Gym</strong></span>
+                            </div>
+                            <div class="routine-chip">
+                                <span>🔥</span> <span>Est. Burn: <strong id="chipBurn">~1,400 kcal/wk</strong></span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline" id="toggleGeneratorBtn">
+                                <span>⚙️</span> Customize Plan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Generator Control Card (Shown by default or toggle) -->
+                    <div class="card" id="generatorCard" style="display: none;">
+                        <div class="card-header">
+                            <h3><span>⚙️</span> Plan Generator Settings</h3>
+                            <button type="button" class="btn btn-sm btn-secondary" id="closeGeneratorBtn">Close</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="workoutSplitDays" class="form-label">Workout Frequency</label>
+                                    <select id="workoutSplitDays" class="form-select">
+                                        <option value="1">1 Day / week (Full Body Essentials)</option>
+                                        <option value="2">2 Days / week (Full Body A/B Split)</option>
+                                        <option value="3">3 Days / week (Push / Pull / Legs)</option>
+                                        <option value="4" selected>4 Days / week (Upper / Lower Split)</option>
+                                        <option value="5">5 Days / week (PPL + Upper / Lower)</option>
+                                        <option value="6">6 Days / week (Push / Pull / Legs x2)</option>
+                                        <option value="7">7 Days / week (Athlete Daily Split)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="workoutEquipment" class="form-label">Available Equipment</label>
+                                    <select id="workoutEquipment" class="form-select">
+                                        <option value="full_gym" selected>Full Commercial Gym (Barbells, Cables, Dumbbells, Machines)</option>
+                                        <option value="dumbbells">Home Dumbbells (Adjustable Dumbbells & Bench/Floor)</option>
+                                        <option value="bodyweight">Bodyweight / Calisthenics (No Equipment / Pull-up bar)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="workoutLevel" class="form-label">Experience Level</label>
+                                    <select id="workoutLevel" class="form-select">
+                                        <option value="beginner">Beginner (3 sets, foundational compound focus)</option>
+                                        <option value="intermediate" selected>Intermediate (3-4 sets, progressive overload)</option>
+                                        <option value="advanced">Advanced (4 sets, high volume & intensity cues)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="workoutGoal" class="form-label">Primary Objective</label>
+                                    <select id="workoutGoal" class="form-select">
+                                        <option value="fat_loss">Fat Loss & Conditioning (High metabolic volume)</option>
+                                        <option value="muscle_gain" selected>Hypertrophy & Muscle Gain (Overload focus)</option>
+                                        <option value="maintenance">Strength & General Fitness Maintenance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+                                <button type="button" class="btn btn-primary" id="generatePlanBtn">
+                                    <span>🚀</span> Generate & Apply Routine
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Day Navigation Tabs -->
+                    <div class="workout-tabs" id="workoutDayTabs" role="tablist">
+                        <!-- Dynamic Day Tabs Injected Here -->
+                    </div>
+
+                    <!-- Selected Day Content Card -->
+                    <div class="card" id="selectedDayCard">
+                        <div class="card-header workout-header-row">
+                            <div>
+                                <h3 id="currentDayTitle" style="font-size: 1.2rem; margin-bottom: 4px;">Day 1: Upper Body Power</h3>
+                                <p class="text-muted" style="margin: 0; font-size: 0.85rem;" id="currentDayFocus">Target: Chest, Back, Shoulders, Arms</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                <div class="routine-chip" id="currentDayMeta">
+                                    <span>⏱️ <strong id="currentDayDuration">45 mins</strong></span>
+                                    <span>•</span>
+                                    <span>🔥 <strong id="currentDayCalories">320 kcal</strong></span>
+                                </div>
+                                <button type="button" class="btn btn-primary" id="scheduleTodayBtn">
+                                    <span>📅</span> Schedule for Today
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Exercises List Container -->
+                            <div style="display: flex; flex-direction: column; gap: 14px;" id="exerciseListContainer">
+                                <!-- Dynamic Exercise Cards Injected Here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Active Session Tracker -->
+                    <div class="card" id="todayActiveSessionCard">
+                        <div class="card-header workout-header-row">
+                            <h3><span>⚡</span> Today's Workout Status</h3>
+                            <span class="badge badge-warning" id="todayStatusBadge">Not Started</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="todaySessionContent" style="display: flex; flex-direction: column; gap: 16px;">
+                                <!-- Today's Active Workout Details Injected Here -->
+                            </div>
                         </div>
                     </div>
                 </section>

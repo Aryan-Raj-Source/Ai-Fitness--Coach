@@ -1515,3 +1515,171 @@ textarea::placeholder {
   display: none;
 }
 
+/* --------------------------------------------------------------------------
+   26. Workout Coach Styles (Phase 3)
+   -------------------------------------------------------------------------- */
+.workout-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.workout-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.workout-tab-btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.workout-tab-btn:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.workout-tab-btn.active {
+  background-color: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+}
+
+.exercise-card {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.exercise-card:hover {
+  border-color: var(--text-muted);
+}
+
+.exercise-card.completed {
+  border-color: var(--accent);
+  background-color: rgba(74, 222, 128, 0.05);
+}
+
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.exercise-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.muscle-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.sets-tracker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.set-bubble {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.set-bubble:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.set-bubble.done {
+  background-color: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent-dim);
+}
+
+.routine-banner-hero {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(74, 222, 128, 0.08));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.routine-stats-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.routine-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  background-color: var(--bg-card);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.routine-chip strong {
+  color: var(--text-primary);
+}
+
+.workout-action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+
