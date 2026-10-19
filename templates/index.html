@@ -587,14 +587,135 @@
                     </div>
                 </section>
 
-                <!-- NUTRITION SECTION -->
-                <section class="section" id="section-nutrition" aria-label="Nutrition">
-                    <div class="section-placeholder">
-                        <div class="empty-state">
-                            <span class="empty-icon">🥗</span>
-                            <h2>Nutrition Tracker</h2>
-                            <p>Track your meals, calories, and macros throughout the day.</p>
-                            <p class="text-muted">Nutrition tracking coming in Phase 4.</p>
+                <!-- NUTRITION SECTION (Phase 4) -->
+                <section class="section" id="section-nutrition" aria-label="Nutrition Tracker">
+                    <!-- Date Selector Banner -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-body" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 20px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <button type="button" class="btn btn-sm btn-secondary" id="ntrPrevDayBtn" aria-label="Previous day">◀</button>
+                                <span style="font-size: 1.1rem; font-weight: 700;" id="ntrDateLabel">Today</span>
+                                <button type="button" class="btn btn-sm btn-secondary" id="ntrNextDayBtn" aria-label="Next day">▶</button>
+                                <button type="button" class="btn btn-sm btn-outline" id="ntrTodayBtn">Jump to Today</button>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="openQuickLogBtn">
+                                <span>➕</span> Log Food Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Daily Calorie & Macro Target Progress Card -->
+                    <div class="nutrition-hero-bar">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <span class="text-muted" style="font-size: 0.85rem; text-transform: uppercase; font-weight: 600;">Daily Calorie Budget</span>
+                                <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 4px;">
+                                    <span style="font-size: 2rem; font-weight: 800; color: var(--accent);" id="ntrCalConsumed">0</span>
+                                    <span style="font-size: 1.25rem; color: var(--text-muted);">/ <span id="ntrCalTarget">2,000</span> kcal</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 0.95rem; font-weight: 600;" id="ntrCalRemaining">2,000 kcal remaining</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="progress-bar" style="height: 12px;">
+                            <div class="progress-fill protein" id="ntrCalBar" style="width: 0%; background-color: var(--accent);"></div>
+                        </div>
+
+                        <!-- Macros Row -->
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 4px;">
+                            <div style="background-color: var(--bg-input); padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--protein-color);">🍗 Protein</span>
+                                    <span style="font-size: 0.8rem; font-weight: 700;" id="ntrProteinVal">0 / 150g</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill protein" id="ntrProteinBar" style="width: 0%;"></div></div>
+                            </div>
+
+                            <div style="background-color: var(--bg-input); padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--carbs-color);">🍚 Carbs</span>
+                                    <span style="font-size: 0.8rem; font-weight: 700;" id="ntrCarbsVal">0 / 250g</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill carbs" id="ntrCarbsBar" style="width: 0%;"></div></div>
+                            </div>
+
+                            <div style="background-color: var(--bg-input); padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--fat-color);">🥑 Fat</span>
+                                    <span style="font-size: 0.8rem; font-weight: 700;" id="ntrFatVal">0 / 65g</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill fat" id="ntrFatBar" style="width: 0%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 Meal Categories Grid -->
+                    <div class="meal-sections-grid">
+                        <!-- Breakfast Card -->
+                        <div class="meal-card" id="cardBreakfast">
+                            <div class="meal-card-header">
+                                <div class="meal-card-title">
+                                    <span>🌅</span> <span>Breakfast</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="meal-calories-badge" id="calsBreakfast">0 kcal</span>
+                                    <button type="button" class="btn btn-sm btn-outline log-meal-btn" data-meal="breakfast">+ Add</button>
+                                </div>
+                            </div>
+                            <div class="meal-items-list" id="listBreakfast">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Lunch Card -->
+                        <div class="meal-card" id="cardLunch">
+                            <div class="meal-card-header">
+                                <div class="meal-card-title">
+                                    <span>☀️</span> <span>Lunch</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="meal-calories-badge" id="calsLunch">0 kcal</span>
+                                    <button type="button" class="btn btn-sm btn-outline log-meal-btn" data-meal="lunch">+ Add</button>
+                                </div>
+                            </div>
+                            <div class="meal-items-list" id="listLunch">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Dinner Card -->
+                        <div class="meal-card" id="cardDinner">
+                            <div class="meal-card-header">
+                                <div class="meal-card-title">
+                                    <span>🌙</span> <span>Dinner</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="meal-calories-badge" id="calsDinner">0 kcal</span>
+                                    <button type="button" class="btn btn-sm btn-outline log-meal-btn" data-meal="dinner">+ Add</button>
+                                </div>
+                            </div>
+                            <div class="meal-items-list" id="listDinner">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Snacks Card -->
+                        <div class="meal-card" id="cardSnack">
+                            <div class="meal-card-header">
+                                <div class="meal-card-title">
+                                    <span>🍪</span> <span>Snacks & Pre/Post Workout</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="meal-calories-badge" id="calsSnack">0 kcal</span>
+                                    <button type="button" class="btn btn-sm btn-outline log-meal-btn" data-meal="snack">+ Add</button>
+                                </div>
+                            </div>
+                            <div class="meal-items-list" id="listSnack">
+                                <!-- Populated dynamically -->
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -648,6 +769,116 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="weightModalCancel">Cancel</button>
                 <button class="btn btn-primary" id="weightModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Log Modal (Phase 4) -->
+    <div class="modal-overlay" id="foodModal" role="dialog" aria-modal="true" aria-labelledby="foodModalTitle">
+        <div class="modal" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3 id="foodModalTitle">Log Food</h3>
+                <button class="modal-close" id="foodModalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 80vh; overflow-y: auto;">
+                <!-- Tab toggle: Search vs Custom -->
+                <div class="segmented-control" role="group">
+                    <button type="button" class="segmented-btn active" id="tabSearchFood">🔍 Search Database</button>
+                    <button type="button" class="segmented-btn" id="tabCustomFood">✏️ Custom Food</button>
+                </div>
+
+                <!-- Pane 1: Search -->
+                <div id="paneSearchFood" style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="form-group" style="margin-bottom: 4px;">
+                        <input type="text" id="foodSearchInput" class="form-input" placeholder="Search foods (e.g. Chicken, Oats, Rice, Eggs)..." autocomplete="off">
+                    </div>
+
+                    <!-- Quick suggestions chips -->
+                    <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Quick Add:</div>
+                    <div class="quick-chips-row" id="foodQuickChips">
+                        <!-- Chips injected dynamically -->
+                    </div>
+
+                    <!-- Search Results -->
+                    <div class="search-results-list" id="foodSearchResults">
+                        <!-- Search items injected dynamically -->
+                    </div>
+
+                    <!-- Selected item config -->
+                    <div id="foodSelectedDetails" style="display: none; background-color: var(--bg-card); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 14px; margin-top: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <strong id="selectedFoodName" style="color: var(--text-primary); font-size: 1rem;">Food Name</strong>
+                            <span class="badge badge-success" id="selectedFoodServing">1 serving</span>
+                        </div>
+
+                        <div class="form-grid-2" style="margin-bottom: 10px;">
+                            <div class="form-group" style="margin: 0;">
+                                <label for="foodServingsCount" class="form-label">Quantity / Servings</label>
+                                <input type="number" id="foodServingsCount" class="form-input" min="0.1" max="50" step="0.25" value="1">
+                            </div>
+                            <div class="form-group" style="margin: 0;">
+                                <label for="foodTargetMealSelect" class="form-label">Meal Category</label>
+                                <select id="foodTargetMealSelect" class="form-select">
+                                    <option value="breakfast">🌅 Breakfast</option>
+                                    <option value="lunch">☀️ Lunch</option>
+                                    <option value="dinner">🌙 Dinner</option>
+                                    <option value="snack">🍪 Snack</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Live scaled macros preview -->
+                        <div style="display: flex; justify-content: space-around; background-color: var(--bg-input); padding: 8px; border-radius: var(--radius-sm); font-size: 0.85rem; text-align: center;">
+                            <div><strong id="previewFoodCals" style="color: var(--accent);">0</strong> kcal</div>
+                            <div><strong id="previewFoodProtein" style="color: var(--protein-color);">0g</strong> Prot</div>
+                            <div><strong id="previewFoodCarbs" style="color: var(--carbs-color);">0g</strong> Carb</div>
+                            <div><strong id="previewFoodFat" style="color: var(--fat-color);">0g</strong> Fat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pane 2: Custom Entry -->
+                <div id="paneCustomFood" style="display: none; flex-direction: column; gap: 12px;">
+                    <div class="form-group">
+                        <label for="customFoodName" class="form-label">Food or Recipe Name *</label>
+                        <input type="text" id="customFoodName" class="form-input" placeholder="e.g. Protein Smoothie Bowl">
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="customFoodMealSelect" class="form-label">Meal Category</label>
+                            <select id="customFoodMealSelect" class="form-select">
+                                <option value="breakfast">🌅 Breakfast</option>
+                                <option value="lunch">☀️ Lunch</option>
+                                <option value="dinner">🌙 Dinner</option>
+                                <option value="snack">🍪 Snack</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="customFoodCals" class="form-label">Calories (kcal) *</label>
+                            <input type="number" id="customFoodCals" class="form-input" min="0" placeholder="250">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div class="form-group">
+                            <label for="customFoodProtein" class="form-label">Protein (g)</label>
+                            <input type="number" id="customFoodProtein" class="form-input" min="0" step="0.5" placeholder="20">
+                        </div>
+                        <div class="form-group">
+                            <label for="customFoodCarbs" class="form-label">Carbs (g)</label>
+                            <input type="number" id="customFoodCarbs" class="form-input" min="0" step="0.5" placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="customFoodFat" class="form-label">Fat (g)</label>
+                            <input type="number" id="customFoodFat" class="form-input" min="0" step="0.5" placeholder="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="foodModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="foodModalAddBtn">Add Food to Meal</button>
             </div>
         </div>
     </div>
