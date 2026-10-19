@@ -227,14 +227,228 @@
                     </div>
                 </section>
 
-                <!-- PROFILE SECTION -->
-                <section class="section" id="section-profile" aria-label="Profile">
-                    <div class="section-placeholder">
-                        <div class="empty-state">
-                            <span class="empty-icon">👤</span>
-                            <h2>Profile & Goals</h2>
-                            <p>Configure your personal details, fitness goals, and daily targets.</p>
-                            <p class="text-muted">Full profile management coming in Phase 2.</p>
+                <!-- PROFILE SECTION (Phase 2) -->
+                <section class="section" id="section-profile" aria-label="Profile & Goals">
+                    <!-- Profile Status Header Banner -->
+                    <div class="card" id="profileStatusBanner">
+                        <div class="card-body" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <h2 style="font-size: 1.3rem; margin-bottom: 4px;">Personal Profile & Goals</h2>
+                                <p class="text-muted" style="font-size: 0.9rem; margin: 0;">Configure your bio-metrics to calculate your BMR, TDEE, and scientific macronutrient splits.</p>
+                            </div>
+                            <div id="profileStatusBadgeContainer">
+                                <span class="badge badge-warning" id="profileStatusBadge">⚠️ Setup Required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Alert Box -->
+                    <div class="error-alert-box" id="profileErrorBox"></div>
+
+                    <!-- Profile Form & Live Preview Grid -->
+                    <div class="profile-grid">
+                        <!-- Left: Form inputs -->
+                        <div style="display: flex; flex-direction: column; gap: 24px;">
+                            <!-- Card 1: Bio-Metrics -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    <h3><span>🧬</span> Body & Bio-Metrics</h3>
+                                    <div class="segmented-control" role="group" aria-label="Measurement Units">
+                                        <button type="button" class="segmented-btn active" id="btnMetric">Metric (kg/cm)</button>
+                                        <button type="button" class="segmented-btn" id="btnImperial">Imperial (lb/in)</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileName" class="form-label">Display Name / Nickname</label>
+                                    <input type="text" id="profileName" class="form-input" placeholder="e.g. Alex" maxlength="50">
+                                </div>
+
+                                <div class="form-grid-2">
+                                    <div class="form-group">
+                                        <label for="profileAge" class="form-label">Age (Years) *</label>
+                                        <input type="number" id="profileAge" class="form-input" min="13" max="120" placeholder="25" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileGender" class="form-label">Biological Sex *</label>
+                                        <select id="profileGender" class="form-select">
+                                            <option value="male">Male (Mifflin +5)</option>
+                                            <option value="female">Female (Mifflin -161)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-grid-2">
+                                    <div class="form-group">
+                                        <label for="profileHeight" class="form-label">Height *</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="profileHeight" class="form-input" min="50" max="300" step="0.5" placeholder="175" required>
+                                            <span class="input-unit" id="heightUnitLabel">cm</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileWeight" class="form-label">Current Weight *</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="profileWeight" class="form-input" min="20" max="500" step="0.1" placeholder="75" required>
+                                            <span class="input-unit" id="weightUnitLabel">kg</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileTargetWeight" class="form-label">Goal Target Weight (Optional)</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="profileTargetWeight" class="form-input" min="20" max="500" step="0.1" placeholder="70">
+                                        <span class="input-unit" id="targetWeightUnitLabel">kg</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Fitness & Goals -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    <h3><span>🎯</span> Activity & Fitness Objective</h3>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileActivityLevel" class="form-label">Daily Activity Level</label>
+                                    <select id="profileActivityLevel" class="form-select">
+                                        <option value="sedentary">Sedentary — Desk job, little to no exercise (x1.20)</option>
+                                        <option value="light">Lightly Active — Light exercise 1-3 days/week (x1.375)</option>
+                                        <option value="moderate" selected>Moderately Active — Moderate exercise 3-5 days/week (x1.55)</option>
+                                        <option value="active">Very Active — Hard exercise 6-7 days/week (x1.725)</option>
+                                        <option value="very_active">Extremely Active — Daily heavy physical training / job (x1.90)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileWorkoutDays" class="form-label">Planned Workout Days / Week (1 - 7)</label>
+                                    <select id="profileWorkoutDays" class="form-select">
+                                        <option value="1">1 Day / week</option>
+                                        <option value="2">2 Days / week</option>
+                                        <option value="3">3 Days / week</option>
+                                        <option value="4" selected>4 Days / week</option>
+                                        <option value="5">5 Days / week</option>
+                                        <option value="6">6 Days / week</option>
+                                        <option value="7">7 Days / week (Daily)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Primary Fitness Goal</label>
+                                    <div class="goal-selection-grid">
+                                        <div class="goal-card-option selected" data-goal="fat_loss" id="goalFatLoss">
+                                            <span class="goal-icon">🔥</span>
+                                            <span class="goal-title">Fat Loss</span>
+                                            <span class="goal-desc">-500 kcal deficit with high protein retention</span>
+                                        </div>
+                                        <div class="goal-card-option" data-goal="maintenance" id="goalMaintenance">
+                                            <span class="goal-icon">⚖️</span>
+                                            <span class="goal-title">Maintenance</span>
+                                            <span class="goal-desc">Caloric balance for steady body recomposition</span>
+                                        </div>
+                                        <div class="goal-card-option" data-goal="muscle_gain" id="goalMuscleGain">
+                                            <span class="goal-icon">🚀</span>
+                                            <span class="goal-title">Muscle Gain</span>
+                                            <span class="goal-desc">+300 kcal lean surplus & high carbohydrate fuel</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileWaterTarget" class="form-label">Daily Hydration Target</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="profileWaterTarget" class="form-input" min="1" max="30" value="8" step="1">
+                                        <span class="input-unit">glasses (250ml)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-primary" id="saveProfileBtn" style="flex: 2; min-width: 180px;">
+                                        <span>💾</span> Save Profile & Update Targets
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="resetProfileBtn" style="flex: 1; min-width: 120px;">
+                                        <span>🔄</span> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Live Metabolic & Targets Preview -->
+                        <div class="preview-sticky">
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    <h3><span>⚡</span> Live Calculation Preview</h3>
+                                    <span class="badge badge-success">Mifflin-St Jeor</span>
+                                </div>
+
+                                <!-- Target Hero -->
+                                <div class="preview-target-hero">
+                                    <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600;">Daily Calorie Target</span>
+                                    <span class="preview-target-val" id="calcTargetCalories">2,000 <span style="font-size: 1.1rem; font-weight: 600;">kcal</span></span>
+                                    <span class="preview-target-sub" id="calcTargetDesc">Caloric Deficit for Fat Loss</span>
+                                </div>
+
+                                <!-- BMR & TDEE 2-col box -->
+                                <div class="preview-metrics-row">
+                                    <div class="preview-metric-box">
+                                        <span class="preview-metric-label">Basal Metabolic Rate</span>
+                                        <span class="preview-metric-val" id="calcBMR">1,750 <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">kcal</span></span>
+                                        <span style="font-size: 0.72rem; color: var(--text-muted);">Burn at rest</span>
+                                    </div>
+                                    <div class="preview-metric-box">
+                                        <span class="preview-metric-label">TDEE Expenditure</span>
+                                        <span class="preview-metric-val" id="calcTDEE">2,500 <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">kcal</span></span>
+                                        <span style="font-size: 0.72rem; color: var(--text-muted);">Daily total burn</span>
+                                    </div>
+                                </div>
+
+                                <!-- BMI box -->
+                                <div class="bmi-badge-box">
+                                    <span style="font-weight: 500; color: var(--text-secondary);">Estimated Body Mass Index (BMI):</span>
+                                    <span id="calcBMI" style="font-weight: 700; color: var(--accent);">24.5 — Normal</span>
+                                </div>
+
+                                <!-- Macro Breakdown -->
+                                <div class="macro-preview-card">
+                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Macro Targets Breakdown</span>
+
+                                    <!-- Protein -->
+                                    <div class="macro-row">
+                                        <div class="macro-label-row">
+                                            <span class="macro-name" style="color: var(--protein-color);">🍗 Protein</span>
+                                            <span class="macro-value" id="calcProtein">175g <span style="font-weight: 400; font-size: 0.78rem; color: var(--text-muted);">(35% • 700 kcal)</span></span>
+                                        </div>
+                                        <div class="progress-bar"><div class="progress-fill protein" id="calcProteinBar" style="width: 35%"></div></div>
+                                    </div>
+
+                                    <!-- Carbs -->
+                                    <div class="macro-row">
+                                        <div class="macro-label-row">
+                                            <span class="macro-name" style="color: var(--carbs-color);">🍚 Carbohydrates</span>
+                                            <span class="macro-value" id="calcCarbs">175g <span style="font-weight: 400; font-size: 0.78rem; color: var(--text-muted);">(35% • 700 kcal)</span></span>
+                                        </div>
+                                        <div class="progress-bar"><div class="progress-fill carbs" id="calcCarbsBar" style="width: 35%"></div></div>
+                                    </div>
+
+                                    <!-- Fat -->
+                                    <div class="macro-row">
+                                        <div class="macro-label-row">
+                                            <span class="macro-name" style="color: var(--fat-color);">🥑 Healthy Fats</span>
+                                            <span class="macro-value" id="calcFat">67g <span style="font-weight: 400; font-size: 0.78rem; color: var(--text-muted);">(30% • 600 kcal)</span></span>
+                                        </div>
+                                        <div class="progress-bar"><div class="progress-fill fat" id="calcFatBar" style="width: 30%"></div></div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick tip -->
+                                <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; padding: 4px 8px; border-left: 3px solid var(--accent); background-color: var(--bg-input); border-radius: 4px;">
+                                    💡 <strong>Scientific Tip:</strong> Targets are automatically recalculated as you type. Click <em>Save Profile</em> to apply them to your daily dashboard.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
