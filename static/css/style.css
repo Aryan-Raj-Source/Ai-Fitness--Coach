@@ -1848,5 +1848,116 @@ textarea::placeholder {
   color: var(--accent);
 }
 
+/* --------------------------------------------------------------------------
+   28. Barcode Scanner Styles (Phase 5)
+   -------------------------------------------------------------------------- */
+.scanner-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .scanner-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scanner-camera-box {
+  background-color: var(--bg-input);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#reader {
+  width: 100% !important;
+  border: none !important;
+}
+
+#reader__scan_region {
+  background: transparent !important;
+}
+
+#reader video {
+  border-radius: var(--radius-md);
+  max-width: 100% !important;
+}
+
+.sample-barcodes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .sample-barcodes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sample-barcode-card {
+  padding: 10px 14px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.sample-barcode-card:hover {
+  border-color: var(--accent);
+  background-color: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.product-result-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px var(--accent-dim);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: sectionFadeIn 0.3s ease;
+}
+
+.nutrition-facts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.nutrition-facts-table th,
+.nutrition-facts-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nutrition-facts-table th {
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.nutrition-facts-table td {
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+
 
 

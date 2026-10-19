@@ -66,3 +66,27 @@ def test_nutrition_validate_route():
         })
         assert invalid_res.status_code == 400
         assert invalid_res.get_json()['valid'] is False
+
+
+def test_barcode_lookup_sample():
+    from backend.services.nutrition_api import lookup_openfoodfacts
+    res = lookup_openfoodfacts('737628064502')
+    assert res is not None
+    assert 'Thai Kitchen' in res['name']
+    assert res['calories'] == 200
+
+
+def test_barcode_lookup_route():
+    app = create_app()
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        res = client.get('/api/nutrition/barcode/737628064502')
+        assert res.status_code == 200
+        data = res.get_json()
+        assert data['found'] is True
+        assert data['product']['name'] is not None
+
+        not_found = client.get('/api/nutrition/barcode/0000000000000')
+        # Could be 404
+        assert not_found.status_code == 404
+

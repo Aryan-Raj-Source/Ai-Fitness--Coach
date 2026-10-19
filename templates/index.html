@@ -720,14 +720,173 @@
                     </div>
                 </section>
 
-                <!-- SCANNER SECTION -->
+                <!-- SCANNER SECTION (Phase 5) -->
                 <section class="section" id="section-scanner" aria-label="Barcode Scanner">
-                    <div class="section-placeholder">
-                        <div class="empty-state">
-                            <span class="empty-icon">📷</span>
-                            <h2>Barcode Scanner</h2>
-                            <p>Scan food barcodes to quickly log nutrition information.</p>
-                            <p class="text-muted">Barcode scanning coming in Phase 5.</p>
+                    <!-- Scanner Hero Header -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-body" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 16px 24px;">
+                            <div>
+                                <h2 style="font-size: 1.3rem; margin-bottom: 4px;">Instant Barcode Scanner</h2>
+                                <p class="text-muted" style="margin: 0; font-size: 0.9rem;">
+                                    Scan packaged food barcodes using your device camera or enter numbers manually to query nutritional facts via OpenFoodFacts.
+                                </p>
+                            </div>
+                            <span class="badge badge-success">OpenFoodFacts Connected</span>
+                        </div>
+                    </div>
+
+                    <div class="scanner-grid">
+                        <!-- Left: Camera & Manual Entry -->
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <!-- Camera Scan Box -->
+                            <div class="card">
+                                <div class="card-header workout-header-row">
+                                    <h3><span>📷</span> Camera Scanner</h3>
+                                    <button type="button" class="btn btn-sm btn-primary" id="btnToggleCamera">
+                                        <span>▶️</span> Start Camera
+                                    </button>
+                                </div>
+                                <div class="card-body" style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                                    <div class="scanner-camera-box" id="scannerCameraWrapper" style="width: 100%;">
+                                        <div id="reader"></div>
+                                        <div id="cameraInactivePrompt" style="text-align: center; color: var(--text-muted); padding: 32px 16px;">
+                                            <span style="font-size: 2.5rem; display: block; margin-bottom: 8px;">📷</span>
+                                            <p style="margin-bottom: 8px; font-weight: 600;">Camera is currently idle</p>
+                                            <p style="font-size: 0.85rem; margin: 0;">Click <strong>Start Camera</strong> above, or enter barcode numbers below.</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted" style="font-size: 0.78rem;" id="scannerStatusText">
+                                        💡 Works with standard UPC, EAN-13, and EAN-8 barcodes.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Manual Lookup & Sample Barcodes Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><span>🔢</span> Manual Barcode Lookup</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label for="barcodeInputManual" class="form-label">Barcode Digits (UPC / EAN)</label>
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="barcodeInputManual" class="form-input" placeholder="e.g. 737628064502" pattern="[0-9]*" inputmode="numeric">
+                                            <button type="button" class="btn btn-primary" id="btnManualLookup" style="white-space: nowrap;">
+                                                <span>🔍</span> Look Up
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick test demo barcodes -->
+                                    <span class="form-label" style="display: block; margin-bottom: 8px;">Or Try Sample Verified Products:</span>
+                                    <div class="sample-barcodes-grid">
+                                        <div class="sample-barcode-card" data-code="737628064502">
+                                            <strong style="font-size: 0.85rem; color: var(--text-primary);">🍜 Rice Noodles</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">737628064502</span>
+                                        </div>
+                                        <div class="sample-barcode-card" data-code="3017620422003">
+                                            <strong style="font-size: 0.85rem; color: var(--text-primary);">🍫 Nutella Spread</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">3017620422003</span>
+                                        </div>
+                                        <div class="sample-barcode-card" data-code="028400070560">
+                                            <strong style="font-size: 0.85rem; color: var(--text-primary);">🥔 Lay's Classic</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">028400070560</span>
+                                        </div>
+                                        <div class="sample-barcode-card" data-code="5449000000996">
+                                            <strong style="font-size: 0.85rem; color: var(--text-primary);">🥤 Coca-Cola</strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">5449000000996</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Scanned Result Card -->
+                        <div class="card" id="scannedProductCard">
+                            <div class="card-header">
+                                <h3><span>🏷️</span> Scanned Product Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Placeholder when nothing scanned -->
+                                <div id="scanEmptyState" class="empty-state" style="padding: 48px 16px;">
+                                    <span class="empty-icon">📦</span>
+                                    <h4 style="font-size: 1.1rem; margin: 0;">No Product Scanned Yet</h4>
+                                    <p class="text-muted" style="margin: 0; font-size: 0.9rem;">
+                                        Point the camera at a barcode, enter digits, or click one of the sample products on the left.
+                                    </p>
+                                </div>
+
+                                <!-- Scanned details container -->
+                                <div id="scannedProductContent" style="display: none; flex-direction: column; gap: 16px;">
+                                    <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                                            <div>
+                                                <h3 id="scannedName" style="font-size: 1.25rem; margin-bottom: 4px; color: var(--text-primary);">Product Name</h3>
+                                                <span class="text-muted" style="font-size: 0.8rem;" id="scannedBarcodeDisplay">Barcode: 000000</span>
+                                            </div>
+                                            <span class="badge badge-success" id="scannedSourceBadge">Verified</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Nutrition table -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <span style="font-size: 0.85rem; font-weight: 600;">Nutrition Facts</span>
+                                            <span style="font-size: 0.8rem; color: var(--text-muted);" id="scannedServingSize">Per 100g</span>
+                                        </div>
+                                        <table class="nutrition-facts-table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>⚡ Energy</th>
+                                                    <td id="scannedCals" style="color: var(--accent); font-size: 1.1rem;">0 kcal</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>🍗 Protein</th>
+                                                    <td id="scannedProtein" style="color: var(--protein-color);">0g</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>🍚 Carbohydrates</th>
+                                                    <td id="scannedCarbs" style="color: var(--carbs-color);">0g</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>🥑 Total Fat</th>
+                                                    <td id="scannedFat" style="color: var(--fat-color);">0g</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Log to meal form -->
+                                    <div style="background-color: var(--bg-input); border-radius: var(--radius-md); padding: 16px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px;">
+                                        <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Log to Daily Tracker:</span>
+
+                                        <div class="form-grid-2">
+                                            <div class="form-group" style="margin: 0;">
+                                                <label for="scannedTargetMeal" class="form-label">Meal Category</label>
+                                                <select id="scannedTargetMeal" class="form-select">
+                                                    <option value="breakfast">🌅 Breakfast</option>
+                                                    <option value="lunch" selected>☀️ Lunch</option>
+                                                    <option value="dinner">🌙 Dinner</option>
+                                                    <option value="snack">🍪 Snack</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" style="margin: 0;">
+                                                <label for="scannedServingsCount" class="form-label">Servings</label>
+                                                <input type="number" id="scannedServingsCount" class="form-input" min="0.1" max="20" step="0.25" value="1">
+                                            </div>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); padding: 10px 14px; border-radius: var(--radius-sm);">
+                                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Logged Calories:</span>
+                                            <span id="scannedTotalCals" style="font-size: 1.15rem; font-weight: 800; color: var(--accent);">0 kcal</span>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary" id="btnLogScannedFood" style="width: 100%;">
+                                            <span>💾</span> Log Scanned Item to Daily Meals
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
