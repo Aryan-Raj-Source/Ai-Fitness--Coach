@@ -1958,6 +1958,211 @@ textarea::placeholder {
   color: var(--text-primary);
 }
 
+/* ==========================================================================
+   Phase 6 - Progress Analytics
+   ========================================================================== */
 
+/* Controls */
+.progress-controls {
+  margin-bottom: 20px;
+}
 
+/* Stats Grid */
+.progress-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
 
+.progress-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px !important;
+}
+
+.progress-stat-icon {
+  font-size: 2rem;
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-dim);
+  border-radius: var(--radius-md);
+}
+
+.progress-stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.progress-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.progress-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.progress-stat-delta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.progress-stat-delta.delta-down {
+  color: var(--accent);
+}
+
+.progress-stat-delta.delta-up {
+  color: var(--warning);
+}
+
+/* Wide chart card (weight trend) */
+.chart-card-wide {
+  grid-column: 1 / -1;
+}
+
+/* Workout History Log */
+.progress-workout-log {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.progress-workout-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-workout-entry {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.progress-workout-entry:hover {
+  background: var(--bg-card-hover);
+}
+
+.progress-workout-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+  gap: 2px;
+}
+
+.progress-workout-day {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-workout-datetext {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.progress-workout-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 2px;
+}
+
+.progress-workout-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.progress-workout-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.progress-workout-badge {
+  font-size: 1.2rem;
+}
+
+/* Data Management */
+.progress-data-card {
+  margin-top: 20px;
+}
+
+.progress-data-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #ef4444;
+  filter: brightness(0.9);
+}
+
+/* --------------------------------------------------------------------------
+   Phase 6 Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .progress-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .progress-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-stat-card {
+    padding: 14px !important;
+  }
+
+  .progress-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .progress-data-actions {
+    flex-direction: column;
+  }
+
+  .progress-data-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .progress-workout-entry {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .progress-workout-date {
+    flex-direction: row;
+    gap: 8px;
+    min-width: auto;
+  }
+}

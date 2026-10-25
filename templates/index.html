@@ -892,13 +892,129 @@
                 </section>
 
                 <!-- PROGRESS SECTION -->
-                <section class="section" id="section-progress" aria-label="Progress">
-                    <div class="section-placeholder">
-                        <div class="empty-state">
-                            <span class="empty-icon">📈</span>
-                            <h2>Progress Analytics</h2>
-                            <p>Track your fitness journey with charts and insights.</p>
-                            <p class="text-muted">Progress analytics coming in Phase 6.</p>
+                <section class="section" id="section-progress" aria-label="Progress Analytics">
+                    <!-- Time Range Selector -->
+                    <div class="progress-controls">
+                        <div class="segmented-control" role="group" aria-label="Time range">
+                            <button type="button" class="segmented-btn active" data-range="7" id="progressRange7">7 Days</button>
+                            <button type="button" class="segmented-btn" data-range="14" id="progressRange14">14 Days</button>
+                            <button type="button" class="segmented-btn" data-range="30" id="progressRange30">30 Days</button>
+                            <button type="button" class="segmented-btn" data-range="90" id="progressRange90">90 Days</button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Stat Cards -->
+                    <div class="progress-stats-grid">
+                        <div class="card progress-stat-card">
+                            <div class="progress-stat-icon">⚖️</div>
+                            <div class="progress-stat-body">
+                                <span class="progress-stat-value" id="progressCurrentWeight">—</span>
+                                <span class="progress-stat-label">Current Weight</span>
+                                <span class="progress-stat-delta" id="progressWeightDelta"></span>
+                            </div>
+                        </div>
+                        <div class="card progress-stat-card">
+                            <div class="progress-stat-icon">🔥</div>
+                            <div class="progress-stat-body">
+                                <span class="progress-stat-value" id="progressStreak">0</span>
+                                <span class="progress-stat-label">Day Streak</span>
+                                <span class="progress-stat-delta" id="progressStreakDetail">consecutive days</span>
+                            </div>
+                        </div>
+                        <div class="card progress-stat-card">
+                            <div class="progress-stat-icon">🍽️</div>
+                            <div class="progress-stat-body">
+                                <span class="progress-stat-value" id="progressAvgCalories">0</span>
+                                <span class="progress-stat-label">Avg Daily Calories</span>
+                                <span class="progress-stat-delta" id="progressCalorieDelta"></span>
+                            </div>
+                        </div>
+                        <div class="card progress-stat-card">
+                            <div class="progress-stat-icon">🏋️</div>
+                            <div class="progress-stat-body">
+                                <span class="progress-stat-value" id="progressWorkoutsCompleted">0</span>
+                                <span class="progress-stat-label">Workouts Completed</span>
+                                <span class="progress-stat-delta" id="progressTotalBurned"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weight Trend Chart -->
+                    <div class="charts-grid">
+                        <div class="card chart-card chart-card-wide">
+                            <div class="card-header">
+                                <h3>Weight Trend</h3>
+                                <button class="btn btn-sm btn-accent" id="progressAddWeightBtn">+ Log Weight</button>
+                            </div>
+                            <div class="card-body">
+                                <div id="progressWeightEmpty" class="empty-state" style="display:none;">
+                                    <span class="empty-icon">⚖️</span>
+                                    <p>No weight entries yet</p>
+                                    <button class="btn btn-sm btn-accent" id="progressAddWeightEmptyBtn">Log your first weight</button>
+                                </div>
+                                <canvas id="progressWeightChart" aria-label="Weight trend over time"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calorie & Macro Charts -->
+                    <div class="charts-grid">
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Daily Calorie Intake</h3></div>
+                            <div class="card-body">
+                                <canvas id="progressCalorieChart" aria-label="Daily calorie intake chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Macro Averages</h3></div>
+                            <div class="card-body">
+                                <canvas id="progressMacroChart" aria-label="Average macronutrient breakdown"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workout History & Water Trend -->
+                    <div class="charts-grid">
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Calories Burned</h3></div>
+                            <div class="card-body">
+                                <canvas id="progressBurnedChart" aria-label="Calories burned chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card chart-card">
+                            <div class="card-header"><h3>Hydration Tracking</h3></div>
+                            <div class="card-body">
+                                <canvas id="progressWaterChart" aria-label="Daily water intake chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workout History Log -->
+                    <div class="card" style="margin-top: 4px;">
+                        <div class="card-header"><h3>Workout History</h3></div>
+                        <div class="card-body">
+                            <div id="progressWorkoutLog" class="progress-workout-log">
+                                <div class="empty-state">
+                                    <span class="empty-icon">🏋️</span>
+                                    <p>No workouts completed yet</p>
+                                    <a href="#workouts" class="btn btn-sm btn-accent">Plan a workout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="card progress-data-card">
+                        <div class="card-header"><h3>Data Management</h3></div>
+                        <div class="card-body">
+                            <p class="text-muted" style="margin-bottom: 16px;">Export your data for backup, import previous data, or clear everything to start fresh.</p>
+                            <div class="progress-data-actions">
+                                <button class="btn btn-primary" id="progressExportBtn">📥 Export Data</button>
+                                <label class="btn btn-secondary" for="progressImportInput" style="cursor:pointer;">📤 Import Data
+                                    <input type="file" id="progressImportInput" accept=".json" style="display:none;">
+                                </label>
+                                <button class="btn btn-danger" id="progressClearBtn">🗑️ Clear All Data</button>
+                            </div>
                         </div>
                     </div>
                 </section>
