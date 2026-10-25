@@ -11,7 +11,8 @@ window.FitCoach.Storage = (function() {
         WATER: 'fitcoach_water',
         WEIGHT_HISTORY: 'fitcoach_weight_history',
         PREFERENCES: 'fitcoach_preferences',
-        THEME: 'fitcoach_theme'
+        THEME: 'fitcoach_theme',
+        COACH_HISTORY: 'fitcoach_coach_history'
     };
 
     // ---- Safe JSON helpers ----
@@ -251,6 +252,29 @@ window.FitCoach.Storage = (function() {
         }
     }
 
+    // ---- AI Coach History ----
+    function getCoachHistory() {
+        return safeGet(KEYS.COACH_HISTORY, []);
+    }
+
+    function saveCoachHistory(history) {
+        return safeSet(KEYS.COACH_HISTORY, history || []);
+    }
+
+    function addCoachMessage(msg) {
+        var history = getCoachHistory();
+        history.push(msg);
+        // Keep last 50 messages to prevent unbounded growth
+        if (history.length > 50) {
+            history = history.slice(history.length - 50);
+        }
+        return saveCoachHistory(history);
+    }
+
+    function clearCoachHistory() {
+        return safeSet(KEYS.COACH_HISTORY, []);
+    }
+
     function clearAllData() {
         Object.keys(KEYS).forEach(function(k) {
             localStorage.removeItem(KEYS[k]);
@@ -293,6 +317,11 @@ window.FitCoach.Storage = (function() {
         setTheme: setTheme,
         // Calories burned
         getCaloriesBurnedForDate: getCaloriesBurnedForDate,
+        // Coach history
+        getCoachHistory: getCoachHistory,
+        saveCoachHistory: saveCoachHistory,
+        addCoachMessage: addCoachMessage,
+        clearCoachHistory: clearCoachHistory,
         // Data management
         exportAllData: exportAllData,
         importAllData: importAllData,

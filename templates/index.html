@@ -42,6 +42,10 @@
                     <span class="nav-icon" aria-hidden="true">📈</span>
                     <span class="nav-label">Progress</span>
                 </a>
+                <a href="#coach" class="nav-item" data-section="coach" role="link">
+                    <span class="nav-icon" aria-hidden="true">🤖</span>
+                    <span class="nav-label">AI Coach</span>
+                </a>
             </nav>
             <div class="sidebar-footer">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">
@@ -101,6 +105,10 @@
                             <span class="qa-icon">⚖️</span>
                             <span class="qa-label">Weight</span>
                         </button>
+                        <a href="#coach" class="quick-action-btn" id="qaAiCoach" aria-label="Ask AI Coach" style="text-decoration: none;">
+                            <span class="qa-icon">🤖</span>
+                            <span class="qa-label">AI Coach</span>
+                        </a>
                     </div>
 
                     <!-- Stats Grid -->
@@ -1018,6 +1026,77 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- AI COACH SECTION -->
+                <section class="section" id="section-coach" aria-label="AI Fitness Coach">
+                    <!-- Top Status & Context Hero Card -->
+                    <div class="card coach-hero-card">
+                        <div class="coach-hero-header">
+                            <div class="coach-identity">
+                                <div class="coach-avatar-badge">🤖</div>
+                                <div>
+                                    <h2 class="coach-title">FitCoach AI Assistant</h2>
+                                    <p class="coach-subtitle">Personalized strength, nutrition, and recovery intelligence synced with your daily logs.</p>
+                                </div>
+                            </div>
+                            <div class="coach-status-container">
+                                <div id="coachStatusBadge" class="coach-status-badge status-fallback">
+                                    <span class="status-dot yellow"></span> Checking AI status...
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline" id="coachQuickAnalysisBtn" title="Run instant daily check">
+                                    <span>⚡</span> Daily Check
+                                </button>
+                                <button type="button" class="btn btn-sm btn-ghost" id="coachClearBtn" title="Clear chat history">
+                                    <span>🗑️</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Context Snapshot -->
+                        <div class="coach-context-bar" id="coachContextSummary">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Category Pills & Quick Prompts -->
+                    <div class="card coach-controls-card">
+                        <div class="coach-category-nav" role="tablist" aria-label="Coach focus categories">
+                            <button type="button" class="coach-category-pill active" data-category="general">💡 General</button>
+                            <button type="button" class="coach-category-pill" data-category="nutrition">🥗 Nutrition</button>
+                            <button type="button" class="coach-category-pill" data-category="workout">🏋️ Workouts</button>
+                            <button type="button" class="coach-category-pill" data-category="plateau">🧗 Plateaus</button>
+                            <button type="button" class="coach-category-pill" data-category="recovery">🧘 Recovery</button>
+                        </div>
+                        <div class="coach-quick-chips" id="coachQuickChips">
+                            <!-- Populated dynamically from /api/coach/tips -->
+                        </div>
+                    </div>
+
+                    <!-- Chat Container -->
+                    <div class="card coach-chat-card">
+                        <div class="coach-messages-area" id="coachMessagesContainer" role="log" aria-live="polite">
+                            <!-- Populated with message history -->
+                        </div>
+
+                        <!-- Typing Indicator -->
+                        <div class="coach-typing-indicator" id="coachTypingIndicator" style="display: none;">
+                            <span class="typing-avatar">🤖</span>
+                            <div class="typing-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="typing-text">FitCoach is preparing your answer...</span>
+                        </div>
+
+                        <!-- Input Bar -->
+                        <form class="coach-input-form" id="coachForm">
+                            <input type="text" class="coach-input" id="coachInput" placeholder="Ask about workouts, meal ideas, plateaus, form tips..." autocomplete="off">
+                            <button type="submit" class="btn btn-primary coach-send-btn" id="coachSendBtn">
+                                <span>Send</span>
+                                <span class="send-icon">🚀</span>
+                            </button>
+                        </form>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
@@ -1161,15 +1240,16 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script src="/static/js/utils.js"></script>
-    <script src="/static/js/storage.js"></script>
-    <script src="/static/js/charts.js"></script>
-    <script src="/static/js/dashboard.js"></script>
-    <script src="/static/js/profile.js"></script>
-    <script src="/static/js/workouts.js"></script>
-    <script src="/static/js/nutrition.js"></script>
-    <script src="/static/js/scanner.js"></script>
-    <script src="/static/js/progress.js"></script>
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/utils.js?v=7"></script>
+    <script src="/static/js/storage.js?v=7"></script>
+    <script src="/static/js/charts.js?v=7"></script>
+    <script src="/static/js/dashboard.js?v=7"></script>
+    <script src="/static/js/profile.js?v=7"></script>
+    <script src="/static/js/workouts.js?v=7"></script>
+    <script src="/static/js/nutrition.js?v=7"></script>
+    <script src="/static/js/scanner.js?v=7"></script>
+    <script src="/static/js/progress.js?v=7"></script>
+    <script src="/static/js/coach.js?v=7"></script>
+    <script src="/static/js/app.js?v=7"></script>
 </body>
 </html>

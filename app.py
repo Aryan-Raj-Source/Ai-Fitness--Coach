@@ -5,6 +5,7 @@ from backend.routes.api import api_bp
 from backend.routes.nutrition import nutrition_bp
 from backend.routes.workouts import workouts_bp
 from backend.routes.profile import profile_bp
+from backend.routes.coach import coach_bp
 
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(nutrition_bp, url_prefix='/api/nutrition')
     app.register_blueprint(workouts_bp, url_prefix='/api/workouts')
     app.register_blueprint(profile_bp, url_prefix='/api/profile')
+    app.register_blueprint(coach_bp, url_prefix='/api/coach')
 
     @app.route('/')
     def index():

@@ -156,6 +156,7 @@ window.FitCoach.Utils = (function() {
         showToast: showToast,
         escapeHtml: escapeHtml,
         getTodayKey: getTodayKey,
+        getTodayString: getTodayKey,
         formatDateKey: formatDateKey,
         getWeekDates: getWeekDates,
         getDayLabel: getDayLabel,

@@ -6,14 +6,15 @@ window.FitCoach.App = (function() {
     var Utils = window.FitCoach.Utils;
     var Storage = window.FitCoach.Storage;
 
-    var sections = ['dashboard', 'profile', 'workouts', 'nutrition', 'scanner', 'progress'];
+    var sections = ['dashboard', 'profile', 'workouts', 'nutrition', 'scanner', 'progress', 'coach'];
     var sectionTitles = {
         dashboard: 'Dashboard',
         profile: 'Profile & Goals',
         workouts: 'Workout Coach',
         nutrition: 'Nutrition Tracker',
         scanner: 'Barcode Scanner',
-        progress: 'Progress Analytics'
+        progress: 'Progress Analytics',
+        coach: 'AI Fitness Coach'
     };
 
     var modules = {
@@ -22,7 +23,8 @@ window.FitCoach.App = (function() {
         workouts: window.FitCoach.Workouts,
         nutrition: window.FitCoach.Nutrition,
         scanner: window.FitCoach.Scanner,
-        progress: window.FitCoach.Progress
+        progress: window.FitCoach.Progress,
+        coach: window.FitCoach.Coach
     };
 
     function init() {
