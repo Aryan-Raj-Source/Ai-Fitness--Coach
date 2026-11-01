@@ -36,8 +36,7 @@ def create_app():
     def not_found(e):
         return jsonify({
             'error': 'Not found',
-            'requested_path': request.path,
-            'url': request.url
+            'requested_path': request.path
         }), 404
 
     @app.errorhandler(500)
@@ -52,6 +51,8 @@ def create_app():
     app.register_blueprint(coach_bp, url_prefix='/api/coach')
 
     @app.route('/')
+    @app.route('/api/index')
+    @app.route('/api/index.py')
     def index():
         return render_template('index.html')
 
@@ -63,15 +64,6 @@ def create_app():
                 'nutrition_api': Config.has_nutritionix(),
                 'ai_coaching': Config.has_gemini()
             }
-        })
-
-    @app.route('/api/debug-env')
-    def debug_env():
-        return jsonify({
-            'path': request.path,
-            'full_path': request.full_path,
-            'headers': dict(request.headers),
-            'environ_keys': {k: str(v) for k, v in request.environ.items() if isinstance(v, (str, int, bool)) and 'KEY' not in k and 'SECRET' not in k}
         })
 
     return app
