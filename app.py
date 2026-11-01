@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, jsonify
 from flask_cors import CORS
 from config import Config
@@ -7,11 +8,36 @@ from backend.routes.workouts import workouts_bp
 from backend.routes.profile import profile_bp
 from backend.routes.coach import coach_bp
 
+# Absolute paths so templates/static resolve in serverless environments
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        template_folder=os.path.join(BASE_DIR, 'templates'),
+        static_folder=os.path.join(BASE_DIR, 'static'),
+    )
     app.config.from_object(Config)
     CORS(app)
+
+    # ── Security headers (production hardening) ──────────────────────
+    @app.after_request
+    def set_security_headers(response):
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        return response
+
+    # ── Error handlers (JSON API-friendly) ───────────────────────────
+    @app.errorhandler(404)
+    def not_found(e):
+        return jsonify({'error': 'Not found'}), 404
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return jsonify({'error': 'Internal server error'}), 500
 
     # Register blueprints
     app.register_blueprint(api_bp, url_prefix='/api')
@@ -37,6 +63,8 @@ def create_app():
     return app
 
 
+# ── WSGI export (used by Vercel and other WSGI servers) ──────────────
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True, port=5000)
