@@ -2644,3 +2644,193 @@ textarea::placeholder {
   }
 }
 
+/* --------------------------------------------------------------------------
+   Know Your Developer Section & Modal
+   -------------------------------------------------------------------------- */
+.dev-trigger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.dev-trigger-btn:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.app-page-footer {
+  padding: 20px 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  margin-top: 36px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-dev-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.footer-dev-link:hover {
+  color: var(--accent-hover);
+}
+
+.dev-modal {
+  max-width: 440px;
+}
+
+.dev-modal-body {
+  padding: 24px 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dev-avatar-wrapper {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.dev-avatar {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 20px rgba(74, 222, 128, 0.25);
+}
+
+.dev-avatar-initials {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f1119;
+  letter-spacing: -0.5px;
+}
+
+.dev-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: var(--shadow);
+}
+
+.dev-byline {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.dev-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.dev-info-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.dev-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+}
+
+.dev-chip-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.dev-chip-text {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.dev-bio {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0 0 18px 0;
+  text-align: center;
+}
+
+.dev-social-links {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.dev-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+}
+
+.dev-icon-svg {
+  flex-shrink: 0;
+}
+
+

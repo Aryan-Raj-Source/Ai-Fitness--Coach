@@ -47,6 +47,7 @@ window.FitCoach.App = (function() {
         bindThemeToggle();
         bindMobileMenu();
         bindKeyboard();
+        bindDeveloperModal();
 
         // Route to initial section
         var hash = window.location.hash.replace('#', '') || 'dashboard';
@@ -144,6 +145,40 @@ window.FitCoach.App = (function() {
                 });
             }
         });
+    }
+
+    function bindDeveloperModal() {
+        var triggerBtn = document.getElementById('btnKnowDeveloper');
+        var triggerFooter = document.getElementById('btnKnowDeveloperFooter');
+        var modal = document.getElementById('developerModal');
+        var closeBtn = document.getElementById('devModalClose');
+        var dismissBtn = document.getElementById('devModalDismiss');
+
+        function openModal() {
+            if (modal) {
+                modal.classList.add('active');
+            }
+            closeMobileMenu();
+        }
+
+        function closeModal() {
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        if (triggerBtn) triggerBtn.addEventListener('click', openModal);
+        if (triggerFooter) triggerFooter.addEventListener('click', openModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
+
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
     }
 
     function navigateTo(sectionName) {
