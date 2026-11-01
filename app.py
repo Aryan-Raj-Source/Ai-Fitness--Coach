@@ -8,15 +8,16 @@ from backend.routes.workouts import workouts_bp
 from backend.routes.profile import profile_bp
 from backend.routes.coach import coach_bp
 
-# Absolute paths so templates/static resolve in serverless environments
+# Absolute paths so templates/static resolve in serverless and local environments
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, 'public', 'static') if os.path.exists(os.path.join(BASE_DIR, 'public', 'static')) else os.path.join(BASE_DIR, 'static')
 
 
 def create_app():
     app = Flask(
         __name__,
         template_folder=os.path.join(BASE_DIR, 'templates'),
-        static_folder=os.path.join(BASE_DIR, 'static'),
+        static_folder=STATIC_DIR,
     )
     app.config.from_object(Config)
     CORS(app)
