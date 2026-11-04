@@ -9,7 +9,8 @@ import requests
 from config import Config
 
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-DEFAULT_MODEL = "gemini-1.5-flash"
+DEFAULT_MODEL = "gemini-flash-latest"
+MODEL_CANDIDATES = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
 
 SYSTEM_INSTRUCTION = (
     "You are FitCoach AI, an elite, certified strength & conditioning specialist (CSCS) "
@@ -20,50 +21,59 @@ SYSTEM_INSTRUCTION = (
 )
 
 
-def call_gemini_api(prompt, system_instruction=None, api_key=None, model=DEFAULT_MODEL, temperature=0.7):
+def call_gemini_api(prompt, system_instruction=None, api_key=None, model=None, temperature=0.7):
     """Call Google Gemini generateContent REST API.
 
+    Automatically falls back across active models (e.g. gemini-flash-latest, gemini-3.8-flash).
     Returns the response text string on success, or None on failure.
     """
     key = api_key or Config.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
     if not key:
         return None
 
-    url = f"{GEMINI_API_URL.format(model=model)}?key={key}"
-    headers = {"Content-Type": "application/json"}
-
-    payload = {
-        "contents": [
-            {
-                "parts": [{"text": prompt}]
-            }
-        ],
-        "generationConfig": {
-            "temperature": temperature,
-            "maxOutputTokens": 1024
-        }
-    }
-
+    models_to_try = [model] if model else MODEL_CANDIDATES
     instruction = system_instruction or SYSTEM_INSTRUCTION
-    if instruction:
-        payload["systemInstruction"] = {
-            "parts": [{"text": instruction}]
+
+    for m in models_to_try:
+        url = f"{GEMINI_API_URL.format(model=m)}?key={key}"
+        headers = {"Content-Type": "application/json"}
+
+        payload = {
+            "contents": [
+                {
+                    "parts": [{"text": prompt}]
+                }
+            ],
+            "generationConfig": {
+                "temperature": temperature,
+                "maxOutputTokens": 1024
+            }
         }
 
-    try:
-        response = requests.post(url, json=payload, headers=headers, timeout=15)
-        if response.status_code == 200:
-            data = response.json()
-            candidates = data.get("candidates", [])
-            if candidates:
-                parts = candidates[0].get("content", {}).get("parts", [])
-                if parts:
-                    return parts[0].get("text", "").strip()
-        return None
-    except Exception as e:
-        # Gracefully handle timeout, connection, or response errors
-        print(f"Gemini API error: {e}")
-        return None
+        if instruction:
+            payload["systemInstruction"] = {
+                "parts": [{"text": instruction}]
+            }
+
+        try:
+            response = requests.post(url, json=payload, headers=headers, timeout=15)
+            if response.status_code == 200:
+                data = response.json()
+                candidates = data.get("candidates", [])
+                if candidates:
+                    parts = candidates[0].get("content", {}).get("parts", [])
+                    if parts:
+                        return parts[0].get("text", "").strip()
+            elif response.status_code == 404:
+                # Model unavailable or superseded for this key, try next model
+                continue
+            else:
+                print(f"Gemini API returned status {response.status_code} for model {m}")
+        except Exception as e:
+            print(f"Gemini API error ({m}): {e}")
+            continue
+
+    return None
 
 
 def build_coaching_prompt(category, user_message=None, profile=None, nutrition=None, workouts=None, progress=None):
