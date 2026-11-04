@@ -46,7 +46,7 @@ def call_gemini_api(prompt, system_instruction=None, api_key=None, model=None, t
             ],
             "generationConfig": {
                 "temperature": temperature,
-                "maxOutputTokens": 1024
+                "maxOutputTokens": 600
             }
         }
 
@@ -56,7 +56,7 @@ def call_gemini_api(prompt, system_instruction=None, api_key=None, model=None, t
             }
 
         try:
-            response = requests.post(url, json=payload, headers=headers, timeout=15)
+            response = requests.post(url, json=payload, headers=headers, timeout=20)
             if response.status_code == 200:
                 data = response.json()
                 candidates = data.get("candidates", [])
