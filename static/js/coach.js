@@ -13,8 +13,15 @@ window.FitCoach.Coach = (function() {
         model: 'FitCoach Rule Engine'
     };
 
+    // Speech Recognition state
+    var recognition = null;
+    var isRecording = false;
+    var speechSupported = typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    var recordingPrefix = '';
+
     function init() {
         bindEvents();
+        initSpeechRecognition();
         checkCoachStatus();
         loadQuickTips();
         renderChatHistory();
@@ -22,6 +29,7 @@ window.FitCoach.Coach = (function() {
     }
 
     function refresh() {
+        stopVoiceRecognition();
         checkCoachStatus();
         updateContextSummary();
     }
@@ -166,6 +174,10 @@ window.FitCoach.Coach = (function() {
     }
 
     function handleSend() {
+        if (isRecording) {
+            stopVoiceRecognition();
+        }
+
         var input = document.getElementById('coachInput');
         if (!input || isThinking) return;
 
@@ -461,11 +473,236 @@ window.FitCoach.Coach = (function() {
         sendMessage(prompts[cat] || 'Give me today\'s top coaching recommendation.', cat);
     }
 
+    // ---- Speech Recognition (Voice Input) ----
+    function getSelectedLang() {
+        var langSelect = document.getElementById('coachVoiceLang');
+        if (langSelect && langSelect.value) {
+            return langSelect.value;
+        }
+        return Storage.getVoiceLang ? Storage.getVoiceLang() : 'en-US';
+    }
+
+    function getLangLabel(code) {
+        if (code === 'hi-IN') return 'Hindi';
+        if (code === 'en-IN') return 'English (IN)';
+        return 'English (US)';
+    }
+
+    function initSpeechRecognition() {
+        var micBtn = document.getElementById('coachMicBtn');
+        var langSelect = document.getElementById('coachVoiceLang');
+        var cancelBtn = document.getElementById('coachVoiceCancelBtn');
+
+        if (langSelect) {
+            var savedLang = Storage.getVoiceLang ? Storage.getVoiceLang() : 'en-US';
+            langSelect.value = savedLang;
+            langSelect.addEventListener('change', function() {
+                var lang = this.value;
+                if (Storage.setVoiceLang) {
+                    Storage.setVoiceLang(lang);
+                }
+                if (recognition) {
+                    recognition.lang = lang;
+                }
+                if (isRecording) {
+                    var statusText = document.getElementById('coachVoiceStatusText');
+                    if (statusText) statusText.textContent = 'Listening (' + getLangLabel(lang) + ')... Speak your query';
+                }
+            });
+        }
+
+        if (micBtn) {
+            if (!speechSupported) {
+                micBtn.title = 'Voice input not supported in this browser (use Chrome/Edge/Safari)';
+                micBtn.classList.add('unsupported');
+            }
+            micBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleVoiceRecognition();
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                cancelVoiceRecognition();
+            });
+        }
+    }
+
+    function toggleVoiceRecognition() {
+        if (!speechSupported) {
+            Utils.showToast('Voice input is not supported in this browser. Please use Google Chrome, Microsoft Edge, or Safari.', 'warning');
+            return;
+        }
+
+        if (isRecording) {
+            stopVoiceRecognition();
+        } else {
+            startVoiceRecognition();
+        }
+    }
+
+    function startVoiceRecognition() {
+        if (isRecording) return;
+
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            Utils.showToast('Voice recognition not available', 'error');
+            return;
+        }
+
+        var input = document.getElementById('coachInput');
+        recordingPrefix = input ? input.value.trim() : '';
+
+        var lang = getSelectedLang();
+
+        try {
+            if (recognition) {
+                try { recognition.abort(); } catch (e) {}
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.lang = lang;
+
+            recognition.onstart = function() {
+                isRecording = true;
+                setRecordingUI(true, lang);
+            };
+
+            recognition.onresult = function(event) {
+                var interimTranscript = '';
+                var finalTranscript = '';
+
+                for (var i = 0; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+
+                var recognizedText = (finalTranscript + ' ' + interimTranscript).trim();
+                if (input && recognizedText) {
+                    if (recordingPrefix) {
+                        input.value = recordingPrefix + ' ' + recognizedText;
+                    } else {
+                        input.value = recognizedText;
+                    }
+                }
+            };
+
+            recognition.onerror = function(event) {
+                console.warn('FitCoach: Speech recognition error:', event.error);
+                var errType = event.error;
+
+                if (errType === 'not-allowed' || errType === 'permission-denied') {
+                    Utils.showToast('Microphone permission denied. Please allow microphone access in your browser settings.', 'error');
+                } else if (errType === 'no-speech') {
+                    Utils.showToast('No speech detected. Please speak closer to your microphone.', 'warning');
+                } else if (errType === 'audio-capture') {
+                    Utils.showToast('No microphone found. Please connect an audio input device.', 'error');
+                } else if (errType === 'network') {
+                    Utils.showToast('Speech recognition network error. Please check your internet connection.', 'error');
+                } else if (errType !== 'aborted') {
+                    Utils.showToast('Voice input notice: ' + errType, 'warning');
+                }
+
+                stopVoiceRecognition();
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                setRecordingUI(false);
+                if (input) {
+                    input.focus();
+                }
+            };
+
+            recognition.start();
+        } catch (err) {
+            console.error('FitCoach: Failed to start speech recognition:', err);
+            Utils.showToast('Could not start voice recognition: ' + (err.message || 'Unknown error'), 'error');
+            stopVoiceRecognition();
+        }
+    }
+
+    function stopVoiceRecognition() {
+        if (recognition) {
+            try {
+                recognition.stop();
+            } catch (e) {
+                try { recognition.abort(); } catch (e2) {}
+            }
+        }
+        isRecording = false;
+        setRecordingUI(false);
+    }
+
+    function cancelVoiceRecognition() {
+        var input = document.getElementById('coachInput');
+        if (recognition) {
+            try {
+                recognition.abort();
+            } catch (e) {}
+        }
+        isRecording = false;
+        setRecordingUI(false);
+        if (input) {
+            input.value = recordingPrefix;
+            input.focus();
+        }
+        Utils.showToast('Voice input cancelled', 'info');
+    }
+
+    function setRecordingUI(active, lang) {
+        var micBtn = document.getElementById('coachMicBtn');
+        var statusBox = document.getElementById('coachVoiceStatus');
+        var statusText = document.getElementById('coachVoiceStatusText');
+        var input = document.getElementById('coachInput');
+
+        if (micBtn) {
+            if (active) {
+                micBtn.classList.add('recording');
+                micBtn.setAttribute('aria-pressed', 'true');
+                micBtn.title = 'Listening... Click to stop';
+            } else {
+                micBtn.classList.remove('recording');
+                micBtn.setAttribute('aria-pressed', 'false');
+                micBtn.title = 'Click to speak (Voice input)';
+            }
+        }
+
+        if (statusBox) {
+            statusBox.style.display = active ? 'flex' : 'none';
+        }
+
+        if (statusText && active) {
+            var label = getLangLabel(lang || getSelectedLang());
+            statusText.textContent = 'Listening (' + label + ')... Speak your query, then review or edit before sending.';
+        }
+
+        if (input) {
+            if (active) {
+                input.placeholder = 'Listening... Your words will appear here';
+            } else {
+                input.placeholder = 'Ask about workouts, meal ideas, plateaus, form tips...';
+            }
+        }
+    }
+
     return {
         init: init,
         refresh: refresh,
         sendMessage: sendMessage,
         askWelcomePrompt: askWelcomePrompt,
-        runQuickAnalysis: runQuickAnalysis
+        runQuickAnalysis: runQuickAnalysis,
+        toggleVoiceRecognition: toggleVoiceRecognition,
+        startVoiceRecognition: startVoiceRecognition,
+        stopVoiceRecognition: stopVoiceRecognition,
+        cancelVoiceRecognition: cancelVoiceRecognition
     };
 })();

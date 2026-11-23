@@ -12,7 +12,8 @@ window.FitCoach.Storage = (function() {
         WEIGHT_HISTORY: 'fitcoach_weight_history',
         PREFERENCES: 'fitcoach_preferences',
         THEME: 'fitcoach_theme',
-        COACH_HISTORY: 'fitcoach_coach_history'
+        COACH_HISTORY: 'fitcoach_coach_history',
+        VOICE_LANG: 'fitcoach_voice_lang'
     };
 
     // ---- Safe JSON helpers ----
@@ -275,6 +276,24 @@ window.FitCoach.Storage = (function() {
         return safeSet(KEYS.COACH_HISTORY, []);
     }
 
+    function getVoiceLang() {
+        try {
+            var raw = localStorage.getItem(KEYS.VOICE_LANG);
+            return raw || 'en-US';
+        } catch (e) {
+            return 'en-US';
+        }
+    }
+
+    function setVoiceLang(lang) {
+        try {
+            localStorage.setItem(KEYS.VOICE_LANG, lang);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     function clearAllData() {
         Object.keys(KEYS).forEach(function(k) {
             localStorage.removeItem(KEYS[k]);
@@ -322,6 +341,8 @@ window.FitCoach.Storage = (function() {
         saveCoachHistory: saveCoachHistory,
         addCoachMessage: addCoachMessage,
         clearCoachHistory: clearCoachHistory,
+        getVoiceLang: getVoiceLang,
+        setVoiceLang: setVoiceLang,
         // Data management
         exportAllData: exportAllData,
         importAllData: importAllData,

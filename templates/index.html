@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitCoach - AI Fitness Coach & Nutrition Tracker</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=8">
+    <link rel="stylesheet" href="/static/css/style.css?v=9">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
 </head>
 <body data-theme="dark">
@@ -1091,8 +1091,28 @@
                             <span class="typing-text">FitCoach is preparing your answer...</span>
                         </div>
 
+                        <!-- Voice Recognition Listening Indicator -->
+                        <div class="coach-voice-status" id="coachVoiceStatus" style="display: none;" role="status" aria-live="polite">
+                            <span class="voice-pulse-dot" aria-hidden="true"></span>
+                            <span class="voice-status-text" id="coachVoiceStatusText">Listening... Speak your query</span>
+                            <button type="button" class="voice-cancel-btn" id="coachVoiceCancelBtn" title="Cancel voice input">✕ Cancel</button>
+                        </div>
+
                         <!-- Input Bar -->
                         <form class="coach-input-form" id="coachForm">
+                            <div class="coach-voice-controls">
+                                <select id="coachVoiceLang" class="coach-voice-lang" title="Select Speech Recognition Language" aria-label="Speech Recognition Language">
+                                    <option value="en-US">🇺🇸 EN (US)</option>
+                                    <option value="en-IN">🇮🇳 EN (IN)</option>
+                                    <option value="hi-IN">🇮🇳 HI (हिन्दी)</option>
+                                </select>
+                                <button type="button" class="coach-mic-btn" id="coachMicBtn" title="Click to speak (Voice input)" aria-label="Voice Input" aria-pressed="false">
+                                    <svg class="mic-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </svg>
+                                </button>
+                            </div>
                             <input type="text" class="coach-input" id="coachInput" placeholder="Ask about workouts, meal ideas, plateaus, form tips..." autocomplete="off">
                             <button type="submit" class="btn btn-primary coach-send-btn" id="coachSendBtn">
                                 <span>Send</span>
@@ -1308,7 +1328,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="/static/js/utils.js?v=7"></script>
-    <script src="/static/js/storage.js?v=7"></script>
+    <script src="/static/js/storage.js?v=9"></script>
     <script src="/static/js/charts.js?v=7"></script>
     <script src="/static/js/dashboard.js?v=7"></script>
     <script src="/static/js/profile.js?v=7"></script>
@@ -1316,7 +1336,7 @@
     <script src="/static/js/nutrition.js?v=7"></script>
     <script src="/static/js/scanner.js?v=7"></script>
     <script src="/static/js/progress.js?v=7"></script>
-    <script src="/static/js/coach.js?v=7"></script>
-    <script src="/static/js/app.js?v=8"></script>
+    <script src="/static/js/coach.js?v=9"></script>
+    <script src="/static/js/app.js?v=9"></script>
 </body>
 </html>

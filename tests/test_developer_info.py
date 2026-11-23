@@ -65,3 +65,4 @@ class TestDeveloperSection:
 
         assert 'bindDeveloperModal' in js
         assert 'developerModal' in js
+
