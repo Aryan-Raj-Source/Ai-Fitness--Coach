@@ -69,3 +69,4 @@ class TestCoachVoiceInput:
         assert 'getVoiceLang' in js
         assert 'setVoiceLang' in js
         assert 'fitcoach_voice_lang' in js
+

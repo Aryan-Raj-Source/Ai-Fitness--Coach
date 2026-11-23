@@ -563,7 +563,7 @@ window.FitCoach.Coach = (function() {
             }
 
             recognition = new SpeechRecognition();
-            recognition.continuous = true;
+            recognition.continuous = false;
             recognition.interimResults = true;
             recognition.maxAlternatives = 1;
             recognition.lang = lang;
@@ -606,7 +606,12 @@ window.FitCoach.Coach = (function() {
                 } else if (errType === 'audio-capture') {
                     Utils.showToast('No microphone found. Please connect an audio input device.', 'error');
                 } else if (errType === 'network') {
-                    Utils.showToast('Speech recognition network error. Please check your internet connection.', 'error');
+                    var isBrave = !!(navigator.brave && typeof navigator.brave.isBrave === 'function');
+                    if (isBrave) {
+                        Utils.showToast('Brave blocks Google Speech Services by default. Please open this app in Google Chrome or Microsoft Edge, or enable "Use Google services for speech" in Brave settings.', 'warning', 8000);
+                    } else {
+                        Utils.showToast('Voice service unreachable (network error). Please open this app in Google Chrome or Microsoft Edge for built-in speech recognition.', 'warning', 7000);
+                    }
                 } else if (errType !== 'aborted') {
                     Utils.showToast('Voice input notice: ' + errType, 'warning');
                 }
